@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard en Directo - Elección Comunidades Telefónica</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Estilos específicos para bloquear el scroll en el Dashboard */
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+    .app-container {
+      height: 100vh;
+      max-width: 100% !important;
+      padding: 1rem 1.5rem !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    main {
+      flex-grow: 1;
+      height: calc(100vh - 80px);
+      display: flex;
+      flex-direction: column;
+    }
+    .communities-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      grid-template-rows: repeat(2, 1fr) !important;
+      gap: 1rem !important;
+      height: 100% !important;
+      margin-top: 0.5rem !important;
+    }
+    .community-live-card {
+      padding: 1.1rem !important;
+      gap: 0.75rem !important;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .community-card-leaderboard {
+      min-height: auto !important;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.5rem !important;
+    }
+    .community-card-row {
+      gap: 0.15rem !important;
+    }
+    .community-card-row .bar-box {
+      height: 10px !important;
+    }
+    header {
+      margin-bottom: 0.5rem !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left !important;
+    }
+    header h1 {
+      font-size: 1.6rem !important;
+    }
+    header p {
+      font-size: 0.85rem !important;
+    }
+    footer {
+      display: none; /* Ocultar footer para maximizar espacio vertical */
+    }
+    @keyframes pulseRedDot {
+      from { opacity: 0.3; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1.15); }
+    }
+  </style>
+  <!-- Carga de Canvas Confetti para la animación final de victoria -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body style="align-items: stretch;">
+
+  <div class="app-container">
+    
+    <header>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div class="logo-container" style="margin-bottom: 0;">
+          <div class="logo-dot"></div>
+          <div class="logo-dot" style="background-color: var(--secondary);"></div>
+        </div>
+        <div>
+          <h1>Comunidades de Conocimiento</h1>
+          <p>Resultados en Tiempo Real - Dirección de IA y Datos</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.2rem;">
+        <!-- Código QR de Votación en Cabecera -->
+        <div style="display: flex; align-items: center; gap: 0.75rem; background: hsla(224, 45%, 15%, 0.6); border: 1px solid var(--border-color); padding: 0.35rem 0.75rem; border-radius: 12px;">
+          <div style="text-align: right; display: flex; flex-direction: column; justify-content: center;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Vota desde el móvil</span>
+            <span style="font-size: 0.65rem; color: var(--text-muted);">Escanea para acceder</span>
+          </div>
+          <img id="qr-code-img" src="" alt="Cargando QR..." style="width: 52px; height: 52px; border-radius: 6px; border: 1.5px solid #fff; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); background: hsla(217, 30%, 50%, 0.1); border: 1px solid var(--border-color); padding: 0.4rem 1rem; border-radius: 20px; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="display: inline-block; width: 8px; height: 8px; background-color: var(--accent-red); border-radius: 50%; animation: pulseRedDot 1.2s infinite alternate;"></span>
+          En Directo
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Rejilla de 8 ranuras (4x2): Slot 1 = Control Panel, Slots 2-8 = 7 Comunidades -->
+      <div class="communities-grid" id="communities-live-grid">
+        
+        <!-- Slot 1: Panel de Control del Administrador -->
+        <div class="glass-card community-live-card" style="border-color: hsla(201, 100%, 48%, 0.35); background: hsla(224, 45%, 8%, 0.7); justify-content: space-between;">
+          
+          <div class="community-card-header" style="border-bottom: 1px solid hsla(217, 30%, 50%, 0.2); padding-bottom: 0.5rem;">
+            <span class="community-card-title" style="color: var(--primary); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 0.4rem;">
+              ⚙️ Panel Control
+            </span>
+            <span style="font-size: 0.75rem; background: rgba(0,255,100,0.1); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 0.1rem 0.5rem; border-radius: 10px; font-weight: 700;">
+              ADMIN
+            </span>
+          </div>
+
+          <!-- Temporizador Circular Integrado -->
+          <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.5rem 0;">
+            <div class="circular-timer" style="width: 90px; height: 90px;">
+              <svg viewBox="0 0 200 200">
+                <circle class="bg-ring" cx="100" cy="100" r="90" style="stroke-width: 12;"></circle>
+                <circle class="progress-ring" id="progress-circle" cx="100" cy="100" r="90" stroke-dasharray="565.48" stroke-dashoffset="0" style="stroke-width: 12;"></circle>
+              </svg>
+              <div class="timer-text-container">
+                <div class="timer-time" id="timer-display" style="font-size: 1.5rem;">03:00</div>
+              </div>
+            </div>
+            
+            <div style="flex-grow: 1;">
+              <div id="timer-status" style="font-weight: 800; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Preparado</div>
+              
+              <!-- Tiempo Configurable -->
+              <div style="display: flex; align-items: center; gap: 0.3rem; margin-top: 0.4rem;">
+                <label for="timer-duration-input" style="margin-bottom: 0; font-size: 0.8rem; color: var(--text-muted);">Duración:</label>
+                <input type="number" id="timer-duration-input" value="3" min="1" max="60" style="width: 48px; padding: 0.25rem; font-size: 0.85rem; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.4); color:#fff; text-align:center; font-weight:700;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controles de Botones Compactos -->
+          <div class="timer-controls" style="margin-top: 0.25rem; gap: 0.4rem; display: flex; width: 100%; flex-wrap: wrap;">
+            <button class="btn-ctrl btn-start" id="btn-start" onclick="controlTimer('start')" style="padding: 0.45rem; font-size: 0.8rem; border-radius: 10px; flex: 1;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Iniciar</span>
+            </button>
+            <button class="btn-ctrl btn-stop" id="btn-pause" onclick="controlTimer('pause')" style="padding: 0.45rem; font-size: 0.8rem; border-radius: 10px; flex: 1; background: linear-gradient(135deg, var(--accent-gold) 0%, hsl(45, 100%, 35%) 100%); border: none; color: #fff;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              <span>Pausar</span>
+            </button>
+            <button class="btn-ctrl" onclick="resetVotacion()" style="padding: 0.45rem; font-size: 0.8rem; border-radius: 10px; flex: 1; border-color: hsla(354, 85%, 56%, 0.25); color: hsl(354, 85%, 70%);">
+              <span>Reset</span>
+            </button>
+            
+            <!-- Botón Celebrar Ganadores (oculto por defecto) -->
+            <button class="btn-ctrl" id="btn-celebrate" onclick="declareWinner()" style="display: none; padding: 0.5rem; font-size: 0.85rem; border-radius: 10px; width: 100%; background: linear-gradient(135deg, var(--accent-gold) 0%, hsl(40, 100%, 40%) 100%); border: none; color: #fff; font-weight: 700; margin-top: 0.4rem; box-shadow: 0 0 10px rgba(255,193,7,0.3); align-items: center; justify-content: center; gap: 0.3rem;">
+              <span>🎉 Celebrar Ganadores</span>
+            </button>
+          </div>
+
+          <!-- Estadísticas Generales -->
+          <div style="border-top: 1px solid hsla(217, 30%, 50%, 0.15); padding-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--text-muted);">Censo Oficial:</span>
+              <strong style="color:#fff; font-size: 0.9rem;">168</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--text-muted);">Participantes:</span>
+              <strong id="total-voters" style="color:var(--secondary); font-size: 0.95rem;">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--text-muted);">Votos Recibidos:</span>
+              <strong id="total-votes" style="color:var(--primary); font-size: 0.95rem;">0</strong>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Ranuras 2-8 serán inyectadas por JS -->
+        <div class="no-votes-message" style="grid-column: 2 / -1;">
+          Cargando rejilla de comunidades...
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Overlay de Celebración del Ganador -->
+    <div class="winner-overlay" id="winner-overlay">
+      <div class="winner-card" style="max-width: 600px; padding: 2.5rem; width: 90%;">
+        <div class="winner-trophy" style="font-size: 3.5rem; margin-bottom: 0.75rem;">🏆</div>
+        <h2>Representantes Electos</h2>
+        <p id="winner-comm-label" style="margin-bottom: 1rem;">Comunidades de Conocimiento - Telefónica</p>
+        
+        <!-- Contenedor dinámico de ganadores por grupo -->
+        <div class="winner-name" id="winner-name">Cargando resultados...</div>
+        
+        <div style="margin-top: 1.5rem;">
+          <button class="btn-primary btn-close-winner" onclick="closeWinnerOverlay()" style="padding: 0.75rem 2rem; font-size: 1rem; width: auto;">
+            Cerrar y Ver Resultados
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

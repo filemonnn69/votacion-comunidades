@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votación Comunidades de Conocimiento - Telefónica</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Indicador de tiempo restante flotante -->
+    <div id="voter-timer-badge" style="position: fixed; top: 15px; right: 15px; z-index: 100; display: none; align-items: center; gap: 0.5rem; background: rgba(6, 12, 26, 0.85); backdrop-filter: blur(10px); border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 30px; font-weight: 700; font-size: 0.9rem;">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); display: inline-block;" id="voter-timer-dot"></span>
+      <span id="voter-timer-text">03:00</span>
+    </div>
+
+    <header>
+      <div class="logo-container">
+        <div class="logo-dot"></div>
+        <div class="logo-dot" style="opacity: 0.6; transform: scale(0.85);"></div>
+        <div class="logo-dot" style="opacity: 0.3; transform: scale(0.7);"></div>
+      </div>
+      <h1>Comunidades Telefónica</h1>
+      <p>Elección del Presidente Representante</p>
+    </header>
+
+    <main style="max-width: 550px; width: 100%; margin: 0 auto;">
+      <div class="glass-card" id="voting-card">
+        
+        <!-- Estado de Espera (si la votación no ha empezado) -->
+        <div id="status-waiting" style="text-align: center; display: none; padding: 1.5rem 0;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">⏳</div>
+          <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">Votación no iniciada</h2>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Por favor, espera a que el presentador inicie la cuenta atrás de 3 minutos en la pantalla principal para poder votar.</p>
+          <div style="display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; background: hsla(217, 30%, 50%, 0.1); border: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-muted);">
+            Sincronizando en tiempo real...
+          </div>
+        </div>
+
+        <!-- Formulario de Voto -->
+        <form id="vote-form" autocomplete="off" onsubmit="submitVote(event)">
+          
+          <div class="form-group">
+            <label for="voter-select">1. Selecciona tu Nombre y Apellidos</label>
+            <select id="voter-select" required onchange="handleVoterSelectChange()">
+              <option value="" disabled selected>Cargando lista de participantes...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="community-select">Tu Comunidad Asignada</label>
+            <select id="community-select" disabled>
+              <option value="" disabled selected>Se asignará al seleccionar tu nombre...</option>
+            </select>
+            <div id="voter-validation-msg" style="font-size: 0.85rem; margin-top: 0.4rem; font-weight: 600; color: var(--secondary);"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="vote1">2. Propón a tu primer compañero (Voto 1)</label>
+            <select id="vote1" required disabled>
+              <option value="" disabled selected>Selecciona tu nombre primero...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="vote2">3. Propón a tu segundo compañero (Voto 2)</label>
+            <select id="vote2" required disabled>
+              <option value="" disabled selected>Selecciona tu nombre primero...</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary" id="btn-submit-vote" style="margin-top: 1.5rem;" disabled>
+            <span>Enviar Propuestas</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+
+        <!-- Feedback de Éxito / Ya Votado -->
+        <div id="voted-success" style="text-align: center; display: none; padding: 2rem 0;">
+          <div style="font-size: 4rem; color: var(--secondary); margin-bottom: 1rem; animation: pulseTrophy 2s infinite ease-in-out;">🎉</div>
+          <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 700;">¡Propuesta Enviada!</h2>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;" id="success-message-text">Tus votos han sido procesados y se están mostrando en el gráfico del presentador en directo.</p>
+          <div id="voted-summary-box" style="background: hsla(224, 45%, 10%, 0.6); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; text-align: left;">
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">Tus propuestas registradas:</p>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #fff; margin-bottom: 0.25rem;" id="summary-vote1">Candidato 1</div>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #fff;" id="summary-vote2">Candidato 2</div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Puedes ver los resultados en vivo en la pantalla de la sala.</p>
+        </div>
+
+        <!-- Alertas de error locales -->
+        <div class="alert alert-error" id="local-error-alert">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span id="local-error-text">Mensaje de error</span>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Dirección de Inteligencia Artificial y Datos - Telefónica</p>
+    </footer>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
