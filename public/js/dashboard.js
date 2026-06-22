@@ -28,6 +28,13 @@ const btnCelebrate = document.getElementById('btn-celebrate');
 const CIRCUMFERENCE = 565.48;
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Generar el código QR dinámicamente según el dominio actual
+  const qrImg = document.getElementById('qr-code-img');
+  if (qrImg) {
+    const rootUrl = window.location.origin;
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(rootUrl)}`;
+  }
+  
   initDashboard();
   connectSSE();
 });
@@ -48,16 +55,10 @@ async function initDashboard() {
     const configRes = await fetch('/api/config');
     configData = await configRes.json();
     
-    // Generar el código QR dinámicamente según el dominio actual
-    const qrImg = document.getElementById('qr-code-img');
-    if (qrImg) {
-      const rootUrl = window.location.origin;
-      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(rootUrl)}`;
-    }
-    
     updateTimerUI(timerState);
     updateStatsUI();
     renderChart();
+
     
   } catch (err) {
     console.error('Error al inicializar dashboard:', err);
