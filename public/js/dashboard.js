@@ -115,7 +115,13 @@ function connectSSE() {
     // Sonar bocina final
     playBeep(220, 1.2); 
     setTimeout(() => playBeep(220, 0.8), 200);
+
+    // Lanzar automáticamente la celebración y el resumen de ganadores
+    setTimeout(() => {
+      declareWinner();
+    }, 1000);
   });
+
   
   sseSource.addEventListener('reset', (e) => {
     const state = JSON.parse(e.data);
