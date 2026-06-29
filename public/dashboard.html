@@ -163,6 +163,11 @@
             <button class="btn-ctrl" onclick="resetVotacion()" style="padding: 0.45rem; font-size: 0.8rem; border-radius: 10px; flex: 1; border-color: hsla(354, 85%, 56%, 0.25); color: hsl(354, 85%, 70%);">
               <span>Reset</span>
             </button>
+            <button class="btn-ctrl btn-stop" id="btn-stop" onclick="controlTimer('stop')" style="padding: 0.45rem; font-size: 0.8rem; border-radius: 10px; flex: 1; background: linear-gradient(135deg, var(--accent-red) 0%, hsl(354, 85%, 40%) 100%); border: none; color: #fff;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16"></rect></svg>
+              <span>Finalizar</span>
+            </button>
+
             
             <!-- Botón Celebrar Ganadores (oculto por defecto) -->
             <button class="btn-ctrl" id="btn-celebrate" onclick="declareWinner()" style="display: none; padding: 0.5rem; font-size: 0.85rem; border-radius: 10px; width: 100%; background: linear-gradient(135deg, var(--accent-gold) 0%, hsl(40, 100%, 40%) 100%); border: none; color: #fff; font-weight: 700; margin-top: 0.4rem; box-shadow: 0 0 10px rgba(255,193,7,0.3); align-items: center; justify-content: center; gap: 0.3rem;">

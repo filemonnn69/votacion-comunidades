@@ -377,6 +377,13 @@ class VotingHandler(http.server.BaseHTTPRequestHandler):
                 timer_state["running"] = False
                 timer_state["remaining"] = duration
                 timer_state["duration"] = duration
+            elif action == 'stop':
+                timer_state["running"] = False
+                timer_state["remaining"] = 0
+                broadcast("timer", timer_state)
+                broadcast("timer_end", {"msg": "¡Tiempo de votación finalizado!"})
+                self.send_json({"status": "success", "timer": timer_state})
+                return
         
         broadcast("timer", timer_state)
         self.send_json({"status": "success", "timer": timer_state})

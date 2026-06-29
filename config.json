@@ -176,7 +176,6 @@
         "ALBERTO SERRANO CANETE",
         "ALICIA YRACHE MUÑOZ",
         "ANA BELEN DORDIO GOMEZ",
-        "ANA ISABEL MORENO FERREIRA",
         "ANA LOPEZ FERNANDEZ",
         "ARANCHA MARCO OLLES",
         "EVA DE FRIAS ALCANTARILLA",
@@ -192,7 +191,6 @@
         "MARIA REYES RUIZ RODRIGUEZ",
         "MARTA JIMENEZ ARROYO",
         "NURIA MORENO GONZALEZ",
-        "PATRICIA MORAL PEDRUELO",
         "VICENTE PASTOR MINETO",
         "YOLANDA ABAD DEL AMO"
       ]
@@ -212,10 +210,6 @@
     }
   ],
   "participantes": [
-    {
-      "nombre": "PATRICIA MORAL PEDRUELO",
-      "comunidad": "usuarios_ofimaticos"
-    },
     {
       "nombre": "MARIA DEL CARMEN ALCANTARA DE LA MAZA",
       "comunidad": "analistas_negocio"
@@ -503,10 +497,6 @@
     {
       "nombre": "JUAN MANUEL CASTILLO GONZALEZ",
       "comunidad": "analistas_negocio"
-    },
-    {
-      "nombre": "ANA ISABEL MORENO FERREIRA",
-      "comunidad": "usuarios_ofimaticos"
     },
     {
       "nombre": "LORENA PEREZ DEL TIO",

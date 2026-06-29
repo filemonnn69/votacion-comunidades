@@ -23,6 +23,7 @@ const winnerNameDisplay = document.getElementById('winner-name');
 const btnStart = document.getElementById('btn-start');
 const btnPause = document.getElementById('btn-pause');
 const btnCelebrate = document.getElementById('btn-celebrate');
+const btnStop = document.getElementById('btn-stop');
 
 // Circunferencia del círculo SVG (2 * PI * R) -> 2 * 3.14159 * 90 = 565.48
 const CIRCUMFERENCE = 565.48;
@@ -309,6 +310,19 @@ function updateTimerUI(timer) {
       btnPause.disabled = true;
       btnPause.style.opacity = '0.4';
       btnPause.style.pointerEvents = 'none';
+    }
+  }
+
+  // Deshabilitar botón de Finalizar si el tiempo ya llegó a 0
+  if (btnStop) {
+    if (timer.remaining === 0) {
+      btnStop.disabled = true;
+      btnStop.style.opacity = '0.4';
+      btnStop.style.pointerEvents = 'none';
+    } else {
+      btnStop.disabled = false;
+      btnStop.style.opacity = '1';
+      btnStop.style.pointerEvents = 'auto';
     }
   }
 }
